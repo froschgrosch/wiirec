@@ -1,15 +1,12 @@
-$games = 'Mario Kart Wii', 'New Super Mario Bros Wii', 'Super Mario Galaxy 2', 'Wii: Party', 'Wii: Play Motion', 'Wii: Sports'
-$gamesShortened = 'MKWii', 'NSMBW', 'SMG2', 'WiiParty', 'WiiMotion', 'WiiSports'
-
+﻿$games = Get-Content .\data\games.json | ConvertFrom-Json
 $modes = '60fps copy', '30fps copy', '30fps x264 medium crf21', '60fps FFV1 FLAC', '30fps FFV1 FLAC'
 
 $outputPath = 'D:\Simon\WiiRec' #'G:\record' # without backslash!
 
 # Select Game
-
 $i = 1
 foreach($game in $games){
-    Write-Host "$i : $game"
+    Write-Host "$i : $($game.name)"
     $i++   
 }
 
@@ -20,7 +17,6 @@ $sel -= 1
 
 
 # Select Mode
-
 $i = 1
 foreach($mode in $modes){
     Write-Host "$i : $mode"
@@ -33,9 +29,10 @@ do {
 
 $filename = Get-Date -UFormat '%Y-%m-%d_%H-%M-%S'
 $filename += "-m$selMode-"
-$filename += $gamesShortened[$sel]
+$filename += $games[$sel].shortName
 
-Write-Output ' ' "Recording now to $filename. Press q to stop." ' '
+Write-Output ' ' "Recording $($games[$sel].name) in mode $($modes[$selMode])." "Filename: $filename - Press q to stop." ' '
+
 switch ($selMode) {
     1 { # 60fps copy
         ffmpeg -hide_banner -y -f dshow -video_size 640x480 -framerate 60 -sample_rate 48k -i video="USB Video":audio="Eingang (Realtek High Definition Audio)" -c copy "$outputPath\$filename.mkv"    
@@ -50,7 +47,7 @@ switch ($selMode) {
     }
 
     4 { # 60fps FFV1 FLAC
-        ffmpeg -hide_banner -y -f dshow -video_size 640x480 -framerate 60 -sample_rate 48k -i video="USB Video":audio="Eingang (Realtek High Definition Audio)" -c:v ffv1 -c:a flac "$outputPath\$filename.mkv"    
+        ffmpeg -hide_banner -y -f dshow -video_size 640x480 -framerate 60 -sample_rate 48k -rtbufsize 20M        -i video="USB Video":audio="Eingang (Realtek High Definition Audio)" -c:v ffv1 -c:a flac "$outputPath\$filename.mkv"    
     }
 
     5 { # 30fps FFV1 FLAC

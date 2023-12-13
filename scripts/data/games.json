@@ -1,0 +1,36 @@
+[
+    {
+        "name": "Mario Kart Wii",
+        "shortName": "MKWii"
+    },{
+        "name": "New Super Mario Bros Wii",
+        "shortName": "NSMBW"
+    },{
+        "name": "Wii Sports",
+        "shortName": "WiiSports"
+    },{
+        "name": "Wii Party",
+        "shortName": "WiiParty"
+    },{
+         "name": "Wii Play: Motion",
+         "shortName": "WPMotion"
+    },{
+        "name": "Wii Fit Plus",
+        "shortName": "WiiFitPlus"
+    },{
+        "name": "Super Mario Galaxy",
+        "shortName": "SMG"
+    },{
+        "name": "Super Mario Galaxy 2",
+        "shortName": "SMG2"
+    },{
+        "name": "Donkey Kong Country Returns",
+        "shortName": "DKCountryR"
+    },{
+        "name": "Just Dance 3",
+        "shortName": "JustDance3"
+    },{
+        "name": "Mario & Sonic bei den Olympischen Spielen - Beijing 2008",
+        "shortName": "MSOlympicGames08"
+    }
+]
