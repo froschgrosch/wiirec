@@ -14,7 +14,7 @@ foreach($game in $games){
 }
 
 do {
-    $sel = [int]$(Read-Host -Prompt 'Spiel ausw‰hlen')
+    $sel = [int]$(Read-Host -Prompt 'Spiel ausw√§hlen')
 } while (-not (1 .. ($games.Length)).Contains($sel))
 $sel -= 1
 
@@ -28,7 +28,7 @@ foreach($mode in $modes){
 }
 
 do {
-    $selMode = [int]$(Read-Host -Prompt 'Modus ausw‰hlen')
+    $selMode = [int]$(Read-Host -Prompt 'Modus ausw√§hlen')
 } while (-not (1 .. ($modes.Length)).Contains($selMode))
 
 $filename = Get-Date -UFormat '%Y-%m-%d_%H-%M-%S'
@@ -57,5 +57,4 @@ switch ($selMode) {
         ffmpeg -hide_banner -y -f dshow -video_size 640x480 -framerate 30 -sample_rate 48k -pixel_format yuyv422 -i video="USB Video":audio="Eingang (Realtek High Definition Audio)" -c:v ffv1 -c:a flac "$outputPath\$filename.mkv"
     }
 }
-
 pause
