@@ -19,7 +19,7 @@ foreach($game in $games){
 }
 
 do {
-    $sel = [int]$(Read-Host -Prompt 'Spiel auswählen')
+    $sel = [int]$(Read-Host -Prompt 'Select game')
 } while (-not (1 .. ($games.Length)).Contains($sel))
 $sel -= 1
 
@@ -32,9 +32,10 @@ foreach($mode in $modes){
 }
 
 do {
-    $selMode = [int]$(Read-Host -Prompt 'Modus auswählen')
+    $selMode = [int]$(Read-Host -Prompt 'Select mode')
 } while (-not (1 .. ($modes.Length)).Contains($selMode))
 
+clear
 $filename = Get-Date -UFormat '%Y-%m-%d_%H-%M-%S'
 $filename += "-m$selMode-"
 $filename += $games[$sel].shortName
@@ -55,11 +56,11 @@ switch ($selMode) {
     }
 
     4 { # 60fps FFV1 FLAC
-        ffmpeg -hide_banner -y -f dshow -video_size 640x480 -framerate 60 -sample_rate 48k -rtbufsize 20M        -i video="USB Video":audio="Eingang (Realtek High Definition Audio)" -c:v ffv1 -c:a flac "$outputPath\$filename.mkv"    
+        ffmpeg -hide_banner -y -f dshow -video_size 640x480 -framerate 60 -sample_rate 48k -rtbufsize 20M        -i video="USB Video":audio="Eingang (Realtek High Definition Audio)" -aspect 16:9 -c:v ffv1 -c:a flac "$outputPath\$filename.mkv"    
     }
 
     5 { # 30fps FFV1 FLAC
-        ffmpeg -hide_banner -y -f dshow -video_size 640x480 -framerate 30 -sample_rate 48k -pixel_format yuyv422 -i video="USB Video":audio="Eingang (Realtek High Definition Audio)" -c:v ffv1 -c:a flac "$outputPath\$filename.mkv"
+        ffmpeg -hide_banner -y -f dshow -video_size 640x480 -framerate 30 -sample_rate 48k -pixel_format yuyv422 -i video="USB Video":audio="Eingang (Realtek High Definition Audio)" -aspect 16:9 -c:v ffv1 -c:a flac "$outputPath\$filename.mkv"
     }
 }
 pause
