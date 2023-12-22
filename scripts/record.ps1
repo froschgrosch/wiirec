@@ -1,7 +1,15 @@
 ﻿$games = Get-Content .\data\games.json | ConvertFrom-Json
 $modes = '60fps copy', '30fps copy', '30fps x264 medium crf21', '60fps FFV1 FLAC', '30fps FFV1 FLAC'
 
-$outputPath = 'D:\Simon\WiiRec' #'G:\record' # without backslash!
+$outputPath = 'D:\Simon\WiiRec1' # without backslash!
+
+# Check output folder
+if (-not (Test-Path $outputPath)){
+    Write-Host 'The specified output path does not exist.' $outputPath
+    pause
+    exit 1
+}
+
 
 # Select Game
 $i = 1

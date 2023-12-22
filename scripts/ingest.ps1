@@ -1,11 +1,20 @@
-$inputPath = 'F:\record'
-$outputPath = 'D:\Bibliotheken\Videos\Captures\Wii'
+$inputPath = 'D:\Simon\WiiRec1'
+$outputPath = 'C:\WiiRec\out'
 
-$files = Get-ChildItem $inputPath
+if (-not (Test-Path $outputPath)){
+    Write-Host 'The specified output path does not exist.' $outputPath
+    pause
+    exit 1
+} 
+elseif (-not (Test-Path $outputPath)){
+    Write-Host 'The specified output path does not exist.' $outputPath
+    pause
+    exit 1
+}
 
 $crop = '609:456:18:11'
 
-:fileloop foreach ($f in $files) {
+:fileloop foreach ($f in Get-ChildItem $inputPath) {
     $name = $f.Name
     $newName = $f.Name.Replace('-m','_m').Remove(20,3).Replace('.mkv','.mp4')
     #Write-Output $f.Name
