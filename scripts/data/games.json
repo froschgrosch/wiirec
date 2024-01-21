@@ -13,7 +13,7 @@
         "shortName": "WiiParty"
     },{
          "name": "Wii Play: Motion",
-         "shortName": "WPMotion"
+         "shortName": "WiiMotion"
     },{
         "name": "Wii Fit Plus",
         "shortName": "WiiFitPlus"
@@ -25,12 +25,12 @@
         "shortName": "SMG2"
     },{
         "name": "Donkey Kong Country Returns",
-        "shortName": "DKCountryR"
+        "shortName": "DKCountry"
     },{
         "name": "Just Dance 3",
         "shortName": "JustDance3"
     },{
         "name": "Mario & Sonic bei den Olympischen Spielen - Beijing 2008",
-        "shortName": "MSOlympicGames08"
+        "shortName": "Olympic08"
     }
 ]
