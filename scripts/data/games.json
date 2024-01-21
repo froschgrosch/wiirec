@@ -1,36 +1,47 @@
 [
     {
         "name": "Mario Kart Wii",
-        "shortName": "MKWii"
+        "shortName": "MKWii",
+        "crop": "609:456:18:11"
     },{
         "name": "New Super Mario Bros Wii",
-        "shortName": "NSMBW"
+        "shortName": "NSMBW",
+        "crop": "607:456:19:11"
     },{
         "name": "Wii Sports",
-        "shortName": "WiiSports"
+        "shortName": "WiiSports",
+        "crop": "607:456:19:11"
     },{
         "name": "Wii Party",
-        "shortName": "WiiParty"
+        "shortName": "WiiParty",
+        "crop": "623:479:12:0"
     },{
          "name": "Wii Play: Motion",
-         "shortName": "WiiMotion"
+         "shortName": "WiiMotion",
+         "crop": "623:479:12:0"
     },{
         "name": "Wii Fit Plus",
-        "shortName": "WiiFitPlus"
+        "shortName": "WiiFitPlus",
+        "crop": "610:456:18:11"
     },{
         "name": "Super Mario Galaxy",
-        "shortName": "SMG"
+        "shortName": "SMG",
+        "crop": "608:456:19:11"
     },{
         "name": "Super Mario Galaxy 2",
-        "shortName": "SMG2"
+        "shortName": "SMG2",
+        "crop": "609:456:18:11"
     },{
         "name": "Donkey Kong Country Returns",
-        "shortName": "DKCountry"
+        "shortName": "DKCountry",
+        "crop": "608:448:19:15"
     },{
         "name": "Just Dance 3",
-        "shortName": "JustDance3"
+        "shortName": "JustDance3",
+        "crop": "640:480:0:0"
     },{
         "name": "Mario & Sonic bei den Olympischen Spielen - Beijing 2008",
-        "shortName": "Olympic08"
+        "shortName": "Olympic08",
+        "crop": "568:448:40:15"
     }
 ]
