@@ -48,4 +48,6 @@ elseif (-not (Test-Path $outputPath)){
 }
 
 $host.ui.RawUI.WindowTitle = 'Encoding finished'
+
+# shutdown -s -f -t 0
 pause

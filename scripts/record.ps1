@@ -35,12 +35,14 @@ do {
     $selMode = [int]$(Read-Host -Prompt 'Select mode')
 } while (-not (1 .. ($modes.Length)).Contains($selMode))
 
-clear
 $filename = Get-Date -UFormat '%Y-%m-%d_%H-%M-%S'
 $filename += "-m$selMode-"
 $filename += $games[$sel].shortName
 
-Write-Output ' ' "Recording $($games[$sel].name) in mode $($modes[$selMode])." "Filename: $filename - Press q to stop." ' '
+$host.ui.RawUI.WindowTitle = "Recording $($games[$sel].name) in $($modes[$selMode - 1])"
+
+Clear-Host
+Write-Output $host.ui.RawUI.WindowTitle "Filename: $filename - Press q to stop." ' '
 
 switch ($selMode) {
     1 { # 60fps copy
