@@ -7,7 +7,8 @@
     },{
         "name": "New Super Mario Bros Wii",
         "shortName": "NSMBW",
-        "crop": "607:456:19:11"
+        "crop": "607:456:19:11",
+        "modes": [0]
     },{
         "name": "Wii Sports",
         "shortName": "WiiSports",

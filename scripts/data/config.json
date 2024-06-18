@@ -27,5 +27,10 @@
         "record": "E:\\zz_temp\\wiirectest\\rec",
         "ingest": "E:\\zz_temp\\wiirectest\\temp",
         "output": "E:\\zz_temp\\wiirectest\\out"
+    },
+    "skipTest": {
+        "mode": true,
+        "file": false,
+        "folder": false
     }
 }
