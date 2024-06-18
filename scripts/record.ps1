@@ -11,11 +11,11 @@ function Test-Mode ($id) {
 
     $proc = Start-Process -PassThru -Wait -FilePath "ffmpeg" -ArgumentList $arguments
     
-    return $proc
+    return $proc.ExitCode -eq 0
 }
  
 # === INITIALIZATION ===
-./functions.ps1
+. .\functions.ps1
 Test-File .\data\config.json
 $config = Read-Json .\data\config.json
 
@@ -34,4 +34,4 @@ $filename = (Get-Date -UFormat '%Y-%m-%d_%H-%M-%S-') + $games[0].shortName
 Add-ToObject $recordinfo 'filename' $filename
 #echo $filename
 
-$proc = Test-Mode 0
+Test-Mode 2
