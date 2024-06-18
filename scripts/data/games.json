@@ -2,7 +2,8 @@
     {
         "name": "Mario Kart Wii",
         "shortName": "MKWii",
-        "crop": "609:456:18:11"
+        "crop": "609:456:18:11",
+        "modes": [0,1]
     },{
         "name": "New Super Mario Bros Wii",
         "shortName": "NSMBW",

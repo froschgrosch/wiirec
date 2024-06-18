@@ -1,0 +1,31 @@
+{
+    "modes": {
+        "record": [
+            { "name": "60fps FFV1 FLAC",
+                "data" : [
+                "-f dshow", "-video_size 640x480", "-framerate 60", "-sample_rate 48k", "-rtbufsize 20M",
+                "-i video=\"USB Video\":audio=\"Eingang (Realtek High Definition Audio)\"",
+                "-aspect 16:9", "-c:v ffv1", "-c:a flac"
+            ]}, 
+            { "name": "30fps FFV1 FLAC",
+                "data" : [
+                "-f dshow","-video_size 640x480","-framerate 30","-sample_rate 48k", "-pixel_format yuyv422",
+                "-i video=\"USB Video\":audio=\"Eingang (Realtek High Definition Audio)\"",
+                "-aspect 16:9", "-c:v ffv1", "-c:a flac"
+            ]},
+            { "name": "test",
+                "data" : [
+                "-f lavfi", "-i color=c=black:s=640x480:rate=60",
+                "-af \"anullsrc=channel_layout=stereo:sample_rate=48k\"",
+                "-aspect 16:9", "-c:v ffv1", "-c:a flac"
+            ]
+        }
+        ],
+        "ingest": []
+    },
+    "path" : {
+        "record": "E:\\zz_temp\\wiirectest\\rec",
+        "ingest": "E:\\zz_temp\\wiirectest\\temp",
+        "output": "E:\\zz_temp\\wiirectest\\out"
+    }
+}
