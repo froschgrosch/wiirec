@@ -45,5 +45,9 @@
         "name": "Mario & Sonic bei den Olympischen Spielen - Beijing 2008",
         "shortName": "Olympic08",
         "crop": "568:448:40:15"
+    },{
+        "name": "Debug",
+        "shortName": "DBG",
+        "modes": [2]
     }
 ]

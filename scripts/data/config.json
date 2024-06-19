@@ -33,5 +33,6 @@
         "file": false,
         "folder": false
     },
-    "processPriority": 64
+    "processPriority": 64,
+    "displayStats": true
 }
