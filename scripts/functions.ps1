@@ -70,3 +70,14 @@ function Debug-Selection {
     Write-Output "DEBUG: Game $i_game (""$($games[$i_game].name)"")" 
     "DEBUG: Mode $i_mode (""$($config.modes.record[$i_mode].name)"")" 
 }
+
+function Show-SizeWithSuffix($num) # https://stackoverflow.com/a/40887001
+{
+    $suffix = "B", "KB", "MB", "GB", "TB"
+    $index = 0
+    while ($num -gt 1kb) {
+        $num = $num / 1kb
+        $index++
+    } 
+    "{0:N0} {1}" -f $num, $suffix[$index]
+}

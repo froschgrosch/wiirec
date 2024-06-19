@@ -93,5 +93,10 @@ Add-ToObject $recordinfo.file.size 'raw'  (Get-Item $filepath).Length
 Write-RecordInfo
 if (-not $config.displayStats) { exit }
 
-Write-Output ' ' '=== Recording Stats ===' "Started at: $($recordinfo.time.start)" "Stopped at: $($recordinfo.time.stop)" "Duration: $($recordinfo.time.duration)"
+# display stats
+Write-Output ' ' '=== Recording Stats ==='
+Write-Output "Started at: $($recordinfo.time.start)" 
+Write-Output "Stopped at: $($recordinfo.time.stop)" 
+Write-Output "Duration: $($recordinfo.time.duration)"
+Write-Output "Raw file size: $(Show-SizeWithSuffix $recordinfo.file.size.raw)"
 Pause
