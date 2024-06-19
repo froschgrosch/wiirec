@@ -1,19 +1,19 @@
 {
     "modes": {
         "record": [
-            { "name": "60fps FFV1 FLAC",
+            { "name": "60fps FFV1 FLAC", "extension": "mkv",
                 "data" : [
                 "-f dshow", "-video_size 640x480", "-framerate 60", "-sample_rate 48k", "-rtbufsize 20M",
                 "-i video=\"USB Video\":audio=\"Eingang (Realtek High Definition Audio)\"",
                 "-aspect 16:9", "-c:v ffv1", "-c:a flac"
             ]}, 
-            { "name": "30fps FFV1 FLAC",
+            { "name": "30fps FFV1 FLAC", "extension": "mkv",
                 "data" : [
                 "-f dshow","-video_size 640x480","-framerate 30","-sample_rate 48k", "-pixel_format yuyv422",
                 "-i video=\"USB Video\":audio=\"Eingang (Realtek High Definition Audio)\"",
                 "-aspect 16:9", "-c:v ffv1", "-c:a flac"
             ]},
-            { "name": "test",
+            { "name": "Debug", "extension": "mkv",
                 "data" : [
                 "-f lavfi", "-i color=c=black:s=640x480:rate=60",
                 "-af \"anullsrc=channel_layout=stereo:sample_rate=48k\"",
@@ -29,8 +29,9 @@
         "output": "E:\\zz_temp\\wiirectest\\out"
     },
     "skipTest": {
-        "mode": true,
+        "mode": false,
         "file": false,
         "folder": false
-    }
+    },
+    "processPriority": 64
 }

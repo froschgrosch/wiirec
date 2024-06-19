@@ -4,19 +4,15 @@ function Write-RecordInfo {
     Write-Json $recordinfo "$($config.path.record)\\$filename.json"
 }
 
-function Add-RecordInfo ($value, $name) {
-    Add-ToObject $recordinfo $value $name
-}
-
-
 function Test-RecordingMode ($id) {
     if ($config.skipTest.mode) { return $true }
+    $filepath = "$($config.path.record)\test.mkv"
+    $arguments = '-hide_banner', '-y', '-t 1' + $config.modes.record[$id].data + $filepath
 
-    $arguments = '-hide_banner', '-y', '-t 1' + $config.modes.record[$id].data + "$($config.path.record)\test.mkv"
     $proc = Start-Process -PassThru -Wait -FilePath 'ffmpeg' -ArgumentList $arguments
     
-    if(Test-Path -PathType leaf "$($config.path.record)\test.mkv") {
-        Remove-Item "$($config.path.record)\test.mkv"
+    if(Test-Path -PathType leaf $filepath) {
+        Remove-Item $filepath
     }
     return $proc.ExitCode -eq 0
 }
@@ -52,8 +48,7 @@ else {
     else {
         exit 1
     }
-}
-Debug-Selection
+} 
 
 # test mode
 if (-not (Test-RecordingMode $i_mode)) {

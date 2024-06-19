@@ -27,7 +27,7 @@ function Write-Json ($inputObject, $outputPath){
     ConvertTo-Json -InputObject $inputObject | Out-File $outputPath
 }
 
-function Add-ToObject ($inputObject, $value, $name) {
+function Add-ToObject ($inputObject, $name, $value) {
     Add-Member -Force -InputObject $inputObject -MemberType NoteProperty -Name $name -Value $value
 }
 
