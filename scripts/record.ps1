@@ -56,9 +56,35 @@ if (-not (Test-RecordingMode $i_mode)) {
 }
 
 # === RECORDING ===
-
 # set up recording information
 $recordinfo = New-Object -TypeName 'PSObject'
+$starttime = Get-Date
 
-$filename = (Get-Date -UFormat '%Y-%m-%d_%H-%M-%S-') + $games[0].shortName
-Add-RecordInfo $filename 'filename'
+Add-ToObject $recordinfo 'game' $i_game
+Add-ToObject $recordinfo 'mode' $i_mode
+Add-ToObject $recordinfo 'filename' (($starttime | Get-Date -UFormat '%Y-%m-%d_%H-%M-%S-') + $games[$i_game].shortName)
+Add-ToObject $recordinfo 'recorder' $Env:USERNAME
+
+Add-ToObject $recordinfo 'time' (New-Object -TypeName 'PSObject')
+Add-ToObject $recordinfo.time 'start' ($starttime | Get-Date -UFormat '%Y-%m-%d %H-%M-%S')
+
+Write-RecordInfo
+
+# start recording
+Clear-Host
+Write-Output "Recording $($games[$i_game].name) in $($config.modes.record[$i_mode].name)." "Filename: $filename - Press q to stop." ' '
+
+$filepath = $config.path.record + '\' + $recordinfo.filename + '.' + $config.modes.record[$i_mode].extension
+$arguments = '-hide_banner', '-y' + $config.modes.record[$i_mode].data + $filepath
+$proc = Start-Process -NoNewWindow -PassThru -FilePath 'ffmpeg' -ArgumentList $arguments
+
+# see https://learn.microsoft.com/en-us/dotnet/api/system.diagnostics.processpriorityclass?view=net-8.0
+$proc.PriorityClass = $config.processPriority 
+$proc.WaitForExit()
+
+# post-recording
+$stoptime = Get-Date
+Add-ToObject $recordinfo.time 'stop' ($stoptime | Get-Date -UFormat '%Y-%m-%d %H-%M-%S')
+Add-ToObject $recordinfo.time 'duration' (($stoptime - $starttime).ToString('hh\:mm\:ss\.ff'))
+
+Write-RecordInfo
