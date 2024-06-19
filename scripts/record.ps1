@@ -1,7 +1,7 @@
 # WiiRec Rewrite - https://github.com/froschgrosch/wiirec
 # === FUNCTIONS ===
 function Write-RecordInfo {
-    Write-Json $recordinfo "$($config.path.record)\\$filename.json"
+    Write-Json $recordinfo ($config.path.record + '\' + $recordinfo.filename + '.json')
 }
 
 function Test-RecordingMode ($id) {
@@ -62,7 +62,7 @@ $starttime = Get-Date
 
 Add-ToObject $recordinfo 'game' $i_game
 Add-ToObject $recordinfo 'mode' $i_mode
-Add-ToObject $recordinfo 'filename' (($starttime | Get-Date -UFormat '%Y-%m-%d_%H-%M-%S-') + $games[$i_game].shortName)
+Add-ToObject $recordinfo 'filename' (($starttime | Get-Date -UFormat '%Y-%m-%d_%H-%M-%S_') + $games[$i_game].shortName)
 Add-ToObject $recordinfo 'recorder' $Env:USERNAME
 
 Add-ToObject $recordinfo 'time' (New-Object -TypeName 'PSObject')
