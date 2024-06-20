@@ -10,15 +10,16 @@ function Write-RecordInfo {
 
 function Test-RecordingMode ($id) {
     if ($config.skipTest.mode) { return $true }
-    $filepath = "$($config.path.record)\test.mkv"
-    $arguments = '-hide_banner', '-y', '-t 1' + $config.modes.record[$id].data + $filepath
+    $arguments = '-hide_banner', '-y', '-t 1' + $config.modes.record[$id].data + "$($config.path.record)\test.mkv"
 
-    $proc = Start-Process -PassThru -Wait -FilePath 'ffmpeg' -ArgumentList $arguments
+    $Env:FFREPORT = 'file=test.ff.log:level=48'
+    $proc = Start-Process -PassThru -Wait -FilePath 'ffmpeg' -WindowStyle Hidden -ArgumentList $arguments -WorkingDirectory $config.path.record
+    $Env:FFREPORT = ''
     
-    if(Test-Path -PathType leaf $filepath) {
-        Remove-Item $filepath
+    if($success = $proc.ExitCode -eq 0) {
+        Remove-Item "$($config.path.record)\test.*"
     }
-    return $proc.ExitCode -eq 0
+    return $success
 }
  
 # === INITIALIZATION ===
