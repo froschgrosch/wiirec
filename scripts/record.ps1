@@ -34,6 +34,14 @@ $games = Read-Json .\data\games.json
 
 Test-Folder $config.path.record
 
+if (Test-Path -PathType Leaf -Path .\data\session.json){
+    Write-Output '=!= An Error has occurred. =!=' 'An active ingestion session was interrupted.' 'You need to finish the session before you can record new videos.'
+    if (Confirm-YN 'Resume ingestion now?'){
+        .\ingest.ps1
+    } 
+    exit 1
+}
+
 # select game and mode
 $i_game = Select-FromArray $games 'Select game' #(0 .. 3) ##DEBUG##
 $i_mode = -1
