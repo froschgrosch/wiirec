@@ -1,4 +1,8 @@
-# WiiRec Rewrite - https://github.com/froschgrosch/wiirec
+###########################################################
+# WiiRec Rewrite - https://github.com/froschgrosch/wiirec #
+# Licensed under GNU GPLv3. - File: functions.ps1         #
+###########################################################
+
 function Confirm-YN($prompt){ # Do a yes/no query and return $true/$false 
     do { 
         $msgboxResult = Read-Host "$prompt (y/n) "

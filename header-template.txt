@@ -1,0 +1,4 @@
+###########################################################
+# WiiRec Rewrite - https://github.com/froschgrosch/wiirec #
+# Licensed under GNU GPLv3. - File:                       #
+###########################################################

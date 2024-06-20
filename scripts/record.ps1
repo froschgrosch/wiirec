@@ -1,4 +1,8 @@
-# WiiRec Rewrite - https://github.com/froschgrosch/wiirec
+############################################################
+# WiiRec Rewrite - https://github.com/froschgrosch/wiirec #
+# Licensed under GNU GPLv3. - File: record.ps1            #
+############################################################
+
 # === FUNCTIONS ===
 function Write-RecordInfo {
     Write-Json $recordinfo ($config.path.record + '\' + $recordinfo.file.name + '.json')
