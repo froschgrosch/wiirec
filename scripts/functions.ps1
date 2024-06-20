@@ -65,8 +65,8 @@ function Exit-Error {
         [Parameter(Mandatory=$false)] [int]$code = 1
     )
 
-    Write-Host $text
-    #pause
+    Write-Output '=!= An Error has occurred. =!=' $text
+    Pause # so that the user can read it
     exit $code
 }
 
