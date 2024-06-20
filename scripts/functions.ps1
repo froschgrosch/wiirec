@@ -43,10 +43,14 @@ function Select-FromArray {
     Param (
         [Parameter(Mandatory=$true)] $arr,
         [Parameter(Mandatory=$true)] [String]$prompt,
-        [Parameter(Mandatory=$false)] $validSelections = 0 .. ($arr.Length - 1)
+        [Parameter(Mandatory=$false)] $ValidSelections = 0 .. ($arr.Length - 1),
+        [Parameter(Mandatory=$false)] $NoExit = $false
     )  <# The selection index that is displayed to the user starts at 1, 
         # while the index returned by this function starts at 0. #>
 
+    ## TODO ##
+    # Fix error action that appears when entering non-numbers.
+    
     $i = 1
     foreach($element in $arr){
         if ($validSelections.Contains($i - 1) -and -not $element.hide){
@@ -54,12 +58,16 @@ function Select-FromArray {
         }
         $i++   
     }
-    Write-Host "c: Exit program"
+
+    if (-not $noexit) {
+        Write-Host "c: Exit program"
+    }
 
     do {
         $sel = Read-Host -Prompt $prompt
-        if ($sel -eq 'c') { exit 0 }
+        if ($sel -eq 'c' -and -not $noexit) { exit 0 }
     } while (-not $validSelections.Contains([int]$sel - 1))
+
     return $sel - 1
 }
 
