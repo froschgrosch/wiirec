@@ -1,4 +1,16 @@
 {
+    "processPriority": 64,
+    "displayStats": true,
+    "path" : {
+        "record": "E:\\zz_temp\\wiirectest\\rec",
+        "ingest": "E:\\zz_temp\\wiirectest\\temp",
+        "output": "E:\\zz_temp\\wiirectest\\out"
+    },
+    "skipTest": {
+        "mode": false,
+        "file": false,
+        "folder": false
+    },
     "modes": {
         "record": [
             { "name": "60fps FFV1 FLAC", "extension": "mkv",
@@ -13,7 +25,7 @@
                 "-i video=\"USB Video\":audio=\"Eingang (Realtek High Definition Audio)\"",
                 "-aspect 16:9", "-c:v ffv1", "-c:a flac"
             ]},
-            { "name": "Debug", "extension": "mkv",
+            { "name": "Debug", "extension": "mkv", "hide": true,
                 "data" : [
                 "-f lavfi", "-i color=c=black:s=640x480:rate=60",
                 "-af \"anullsrc=channel_layout=stereo:sample_rate=48k\"",
@@ -22,17 +34,5 @@
         }
         ],
         "ingest": []
-    },
-    "path" : {
-        "record": "E:\\zz_temp\\wiirectest\\rec",
-        "ingest": "E:\\zz_temp\\wiirectest\\temp",
-        "output": "E:\\zz_temp\\wiirectest\\out"
-    },
-    "skipTest": {
-        "mode": false,
-        "file": false,
-        "folder": false
-    },
-    "processPriority": 64,
-    "displayStats": true
+    }
 }

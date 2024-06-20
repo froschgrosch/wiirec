@@ -48,6 +48,7 @@
     },{
         "name": "Debug",
         "shortName": "DBG",
-        "modes": [2]
+        "modes": [2],
+        "hide" : true
     }
 ]

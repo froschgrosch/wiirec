@@ -45,7 +45,7 @@ function Select-FromArray {
 
     $i = 1
     foreach($element in $arr){
-        if ($validSelections.Contains($i - 1)){
+        if ($validSelections.Contains($i - 1) -and -not $element.hide){
             Write-Host "$i`: $($element.name)"
         }
         $i++   
