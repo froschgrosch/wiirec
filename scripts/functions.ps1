@@ -35,6 +35,10 @@ function Add-ToObject ($inputObject, $name, $value) {
     Add-Member -Force -InputObject $inputObject -MemberType NoteProperty -Name $name -Value $value
 }
 
+function Add-NewProperty ($inputObject, $name){
+    Add-ToObject $inputObject -name $name -value (New-Object -TypeName 'PSObject')
+}
+
 function Select-FromArray {
     Param (
         [Parameter(Mandatory=$true)] $arr,
