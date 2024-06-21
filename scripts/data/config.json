@@ -13,27 +13,49 @@
         "folder": false
     },
     "modes": {
-        "record": [
-            { "name": "60fps FFV1 FLAC", "extension": "mkv",
-                "data" : [
+        "record": [{ 
+            "name": "60fps FFV1 FLAC", 
+            "extension": "mkv", 
+            "ingestMode": 0,
+            "data" : [
                 "-f dshow", "-video_size 640x480", "-framerate 60", "-sample_rate 48k", "-rtbufsize 20M",
                 "-i video=\"USB Video\":audio=\"Eingang (Realtek High Definition Audio)\"",
                 "-aspect 16:9", "-c:v ffv1", "-c:a flac"
-            ]}, 
-            { "name": "30fps FFV1 FLAC", "extension": "mkv",
-                "data" : [
+            ]
+        }, { 
+            "name": "30fps FFV1 FLAC", 
+            "extension": "mkv", 
+            "ingestMode": 1,
+            "data" : [
                 "-f dshow","-video_size 640x480","-framerate 30","-sample_rate 48k", "-pixel_format yuyv422",
                 "-i video=\"USB Video\":audio=\"Eingang (Realtek High Definition Audio)\"",
                 "-aspect 16:9", "-c:v ffv1", "-c:a flac"
-            ]},
-            { "name": "Debug", "extension": "mkv", "hide": true,
-                "data" : [
+            ]
+        }, { 
+            "name": "Debug", 
+            "extension": "mkv", 
+            "hide": true, 
+            "ingestMode": 1,
+            "data" : [
                 "-f lavfi", "-i color=c=black:s=640x480:rate=60",
                 "-af \"anullsrc=channel_layout=stereo:sample_rate=48k\"",
                 "-aspect 16:9", "-c:v ffv1", "-c:a flac"
             ]
-        }
-        ],
-        "ingest": []
+        }],
+        "ingest": [{ 
+            "name": "x264 (CRF 21, preset medium)", 
+            "extension": "mp4",
+            "data" : [
+                "-c:v libx264", "-tune:v animation", "-crf:v 21", "-preset:v medium", 
+                "-c:a aac", "-b:a 128k", "-aspect 16:9", "-movflags +faststart"
+            ]
+        }, { 
+            "name": "x264 (CRF 20, preset medium)", 
+            "extension": "mp4",
+            "data" : [
+                    "-c:v libx264", "-tune:v animation", "-crf:v 20", "-preset:v medium", 
+                    "-c:a aac", "-b:a 128k", "-aspect 16:9", "-movflags +faststart"
+            ]}
+        ]
     }
 }

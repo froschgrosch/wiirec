@@ -18,7 +18,7 @@ Test-File .\data\config.json
 $config = Read-Json .\data\config.json
 
 Test-File .\data\config.json
-$games = Read-Json .\data\config.json
+$games = Read-Json .\data\games.json
 
 
 $directOutput = $true
@@ -84,3 +84,41 @@ if ($config.confirmSession) {
         }
     }
 }
+
+:transcodeLoop foreach($file in (Get-ChildItem $config.path.record | Where-Object -Property 'Extension' -EQ '.json')) {
+    $recordinfo = Read-Json $file.FullName
+    $ingestMode = $config.modes.ingest[$config.modes.record[$recordinfo.mode].ingestMode]
+
+    Write-Output "Transcoding ""$($recordinfo.file.name)""..."
+    Write-Output "Recording started at: $($recordinfo.time.start)" 
+    Write-Output "Recording stopped at: $($recordinfo.time.stop)" 
+    Write-Output "Record duration: $($recordinfo.time.duration)"
+
+    # set default cropping (no cropping) value if necessary
+    if ($null -eq $games[$recordinfo.game].crop){
+        Add-ToObject $games[$recordInfo.game] 'crop' 'iw:ih:0:0'
+    }
+
+    # determine file paths
+    $filepath_in = $config.path.record + '\' + $recordinfo.file.name + '.' + $config.modes.record[$recordInfo.mode].extension
+
+    if ($directOutput) {
+        $folder = $config.path.output
+    } 
+    else {
+        $folder = $config.path.ingest
+    }
+    $filepath_out = $folder + '\' + $recordinfo.file.name + '.' + $ingestMode.extension
+    
+    # determine arguments
+    $arguments = '-hide_banner', '-y', '-i' + $filepath_in + $ingestMode.data + "-vf crop=$($games[$recordinfo.game].crop)" + $filepath_out
+    
+    $proc = Start-Process -Wait -NoNewWindow -PassThru -FilePath 'ffmpeg' -ArgumentList $arguments
+
+    if($proc.ExitCode -ne 0) {
+        # TODO - Add error handling
+    }
+}
+
+# TODO - Remove / tag source files as finished
+# TODO - Remove / archive session file

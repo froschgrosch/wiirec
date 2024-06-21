@@ -10,7 +10,7 @@ function Write-RecordInfo {
 
 function Test-RecordingMode ($id) {
     if ($config.skipTest.mode) { return $true }
-    $arguments = '-hide_banner', '-y', '-t 1' + $config.modes.record[$id].data + "$($config.path.record)\test.mkv"
+    $arguments = '-y', '-t 1' + $config.modes.record[$id].data + "$($config.path.record)\test.mkv"
 
     $Env:FFREPORT = 'file=test.ff.log:level=48'
     $proc = Start-Process -PassThru -Wait -FilePath 'ffmpeg' -WindowStyle Hidden -ArgumentList $arguments -WorkingDirectory $config.path.record
