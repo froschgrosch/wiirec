@@ -1,0 +1,15 @@
+{
+    "processPriority": 64,
+    "displayStats": true,
+    "confirmSession": false,
+    "path" : {
+        "record": "E:\\zz_temp\\wiirectest\\rec",
+        "ingest": "E:\\zz_temp\\wiirectest\\temp",
+        "output": "E:\\zz_temp\\wiirectest\\out"
+    },
+    "skipTest": {
+        "mode": false,
+        "file": false,
+        "folder": false
+    }
+}

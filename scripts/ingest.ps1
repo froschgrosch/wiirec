@@ -14,12 +14,8 @@ $confirmSelectionText = ('[{"name": "Confirm session"},{"name":"Inspect session"
 Write-Output '=== WiiRec Rewrite ==='
 
 . .\functions.ps1
-Test-File .\data\config.json
-$config = Read-Json .\data\config.json
-
-Test-File .\data\config.json
-$games = Read-Json .\data\games.json
-
+$config = Get-Config
+$games = Get-Games
 
 $directOutput = $true
 Test-Folder $config.path.output

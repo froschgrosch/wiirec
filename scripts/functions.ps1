@@ -103,3 +103,18 @@ function Show-SizeWithSuffix($num) # https://stackoverflow.com/a/40887001
     } 
     "{0:N0} {1}" -f $num, $suffix[$index]
 }
+
+function Get-Config {
+    Test-File .\data\options.json
+    Test-File .\data\modes.json
+        
+    $config = Read-Json .\data\options.json
+    Add-ToObject $config 'modes' (Read-Json .\data\modes.json)
+
+    return $config
+}
+
+function Get-Games {
+    Test-File .\data\games.json
+    return (Read-Json .\data\games.json)
+}

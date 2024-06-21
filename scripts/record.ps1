@@ -26,11 +26,8 @@ function Test-RecordingMode ($id) {
 Write-Output '=== WiiRec Rewrite ==='
 
 . .\functions.ps1
-Test-File .\data\config.json
-$config = Read-Json .\data\config.json
-
-Test-File .\data\games.json
-$games = Read-Json .\data\games.json
+$config = Get-Config
+$games = Get-Games
 
 Test-Folder $config.path.record
 
