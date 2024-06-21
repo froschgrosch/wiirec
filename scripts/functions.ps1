@@ -47,9 +47,6 @@ function Select-FromArray {
         [Parameter(Mandatory=$false)] $NoExit = $false
     )  <# The selection index that is displayed to the user starts at 1, 
         # while the index returned by this function starts at 0. #>
-
-    ## TODO ##
-    # Fix error action that appears when entering non-numbers.
     
     $i = 1
     foreach($element in $arr){
@@ -63,12 +60,21 @@ function Select-FromArray {
         Write-Host "c: Exit program"
     }
 
-    do {
+    :selectNumber do {
         $sel = Read-Host -Prompt $prompt
-        if ($sel -eq 'c' -and -not $noexit) { exit 0 }
-    } while (-not $validSelections.Contains([int]$sel - 1))
+        if ($sel -eq 'c' -and -not $noexit) { 
+            exit 0 
+        }
+        
+        try {
+             $number = [int]$sel - 1 
+        }
+        catch { # conversion to integer failed
+            continue :selectNumber
+        }
+    } while (-not $validSelections.Contains($number))
 
-    return $sel - 1
+    return $number
 }
 
 function Exit-Error {

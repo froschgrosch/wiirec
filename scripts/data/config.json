@@ -1,6 +1,7 @@
 {
     "processPriority": 64,
     "displayStats": true,
+    "confirmSession": true,
     "path" : {
         "record": "E:\\zz_temp\\wiirectest\\rec",
         "ingest": "E:\\zz_temp\\wiirectest\\temp",

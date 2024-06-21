@@ -8,7 +8,7 @@ function Write-Session{
     Write-Json $session .\data\session.json
 }
 
-Set-Variable confirmSelectionText -Option Constant -Value ('[{"name": "Confirm session"},{"name":"Inspect session"},{"name":"Exit application (Hint: This will delete the session file.)"}]' | ConvertFrom-Json)
+$confirmSelectionText = ('[{"name": "Confirm session"},{"name":"Inspect session"},{"name":"Discard session"}]' | ConvertFrom-Json)
 
 # === INITIALIZATION ===
 Write-Output '=== WiiRec Rewrite ==='
@@ -32,16 +32,19 @@ if ($config.path.ingest){
 }
 
 # === RESUME / CREATE SESSION ===
-if ($false -and (Test-Path -PathType Leaf .\data\session.json)) { # Read existing ingest session
+if (Test-Path -PathType Leaf .\data\session.json) { # Read existing ingest session
     $session = Read-Json '.\data\session.json'
         
     Add-ToObject $session.time 'resumed' (Get-Date -UFormat '%Y-%m-%d %H-%M-%S')
+    Write-Output "Resuming session from $($session.time.start)..."
 }
 else { # Create fresh session
     $session = New-Object -TypeName 'PSObject'
     
     Add-NewProperty $session 'time'
     Add-ToObject $session.time 'start' (Get-Date -UFormat '%Y-%m-%d %H-%M-%S')
+
+    Write-Output "Creating fresh session at $($session.time.start)..."
 
     Add-ToObject $session 'list' @()
     :getRecordings foreach($file in (Get-ChildItem $config.path.record | Where-Object -Property 'Extension' -EQ '.json')){
@@ -59,17 +62,25 @@ else { # Create fresh session
 }
 Write-Session
 
-if ($true -or $config.application.confirmSession) { ## DEBUG ## Remove $true when finished ##
-    Switch ((Select-FromArray $confirmSelectionText 'Choose action' -NoExit $true)){
+if ($config.confirmSession) {
+    Write-Output ' '
+    Switch (Select-FromArray $confirmSelectionText 'Choose action'){
         0 { # Confirm
-
+            Write-Output ' ' 'Session has been confirmed.'
         }
         1 { # Inspect
-            # TODO: start editor
-            $session = Read-Session
-        }
-        2 { # Exit cleanly
 
+            # rename file to make default txt editor work
+            $file = Rename-Item -PassThru -Path '.\data\session.json' -NewName 'session.json.txt'
+            Start-Process -Wait -FilePath $file
+            Rename-Item -Path $file -NewName 'session.json'
+            
+            Write-Output ' ' 'Session has possibly been edited. Reloading...'
+            $session = Read-Json .\data\session.json
+        }
+        2 { # Discard session
+            Remove-Item .\data\session.json
+            exit
         }
     }
 }
