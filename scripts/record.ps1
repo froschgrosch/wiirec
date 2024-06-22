@@ -68,13 +68,12 @@ if (-not (Test-RecordingMode $i_mode)) {
 # === RECORDING ===
 # set up recording information
 $recordinfo = New-Object -TypeName 'PSObject'
-$starttime = Get-Date
 
 Add-ToObject $recordinfo 'game' $i_game
 Add-ToObject $recordinfo 'mode' $i_mode
 Add-ToObject $recordinfo 'recorder' $Env:USERNAME
 Add-NewProperty $recordinfo 'file'
-Add-ToObject $recordinfo.file 'name'  (($starttime | Get-Date -UFormat '%Y-%m-%d_%H-%M-%S_') + $games[$i_game].shortName)
+Add-ToObject $recordinfo.file 'name'  ((($starttime = Get-Date) | Get-Date -UFormat '%Y-%m-%d_%H-%M-%S_') + $games[$i_game].shortName)
 Add-NewProperty $recordinfo 'time'
 Add-ToObject $recordinfo.time 'start' ($starttime | Get-Date -UFormat '%Y-%m-%d %H-%M-%S')
 
@@ -93,8 +92,7 @@ $proc.PriorityClass = $config.processPriority
 $proc.WaitForExit()
 
 # post-recording
-$stoptime = Get-Date
-Add-ToObject $recordinfo.time 'stop' ($stoptime | Get-Date -UFormat '%Y-%m-%d %H-%M-%S')
+Add-ToObject $recordinfo.time 'stop' (($stoptime = Get-Date) | Get-Date -UFormat '%Y-%m-%d %H-%M-%S')
 Add-ToObject $recordinfo.time 'duration' (($stoptime - $starttime).ToString('hh\:mm\:ss\.ff'))
 
 Add-NewProperty $recordinfo.file 'size'
