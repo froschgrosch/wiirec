@@ -90,6 +90,8 @@ if ($config.confirmSession) {
     Write-Output "Recording stopped at: $($recordinfo.time.stop)" 
     Write-Output "Record duration: $($recordinfo.time.duration)"
 
+    ## TODO ## Add session start time
+
     # set default cropping (no cropping) value if necessary
     if ($null -eq $games[$recordinfo.game].crop){
         Add-ToObject $games[$recordInfo.game] 'crop' 'iw:ih:0:0'
@@ -111,10 +113,33 @@ if ($config.confirmSession) {
     
     $proc = Start-Process -Wait -NoNewWindow -PassThru -FilePath 'ffmpeg' -ArgumentList $arguments
 
-    if($proc.ExitCode -ne 0) {
-        # TODO - Add error handling
+    ## TODO ## Add finished flag to session file
+    ## TODO ## Add stop time to session 
+
+    if (-not $directOutput) {
+        Move-Item -Path $filepath_out -Destination ($config.path.output + '\' + $recordinfo.file.name + '.' + $ingestMode.extension)
+    } 
+}
+
+Switch ($config.exit.behaviour){
+    0 { # exit w/ pause
+        exit
+    }
+    1 { # exit w/o pause
+        Write-Output 'The ingestion process has finished.'
+        Pause
+        exit
+    }
+    2 { # shutdown
+        shutdown -s -f -t $config.exit.shutdownTimeout -c "WiiRec Ingestion process has finished. Shutting down in $($config.exit.shutdownTimeout) seconds."
+        if (YNquery('Cancel shutdown?')) { 
+            shutdown -a
+            Pause
+        }
+        exit
     }
 }
 
 # TODO - Remove / tag source files as finished
 # TODO - Remove / archive session file
+# TODO - Add error handling
