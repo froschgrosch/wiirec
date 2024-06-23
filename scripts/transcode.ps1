@@ -72,7 +72,7 @@ $session = Get-Session
     }
 }
 
-exit
+Remove-Item .\data\session.json
 
 Switch ($config.exit.behaviour){
     0 { # exit w/ pause
