@@ -1,6 +1,6 @@
 ###########################################################
 # WiiRec Rewrite - https://github.com/froschgrosch/wiirec #
-# Licensed under GNU GPLv3. - File: ingest.ps1            #
+# Licensed under GNU GPLv3. - File: ingest_old.ps1        #
 ###########################################################
 
 # === FUNCTIONS AND CONSTANTS ===
