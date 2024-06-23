@@ -1,7 +1,6 @@
 {
     "processPriority": 64,
     "displayStats": true,
-    "confirmSession": false,
     "deleteSourceFiles": false,
     "exit" : {
         "behaviour": 1,

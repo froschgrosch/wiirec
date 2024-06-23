@@ -11,7 +11,7 @@ Write-Output '=== WiiRec Rewrite ==='
 
 . .\functions.ps1
 $config = Get-Config
-$games = Get-Games
+# $games = Get-Games
 
 # Create session
 $session = New-Object -TypeName 'PSObject'
