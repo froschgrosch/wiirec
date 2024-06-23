@@ -1,68 +1,110 @@
-﻿$games = Get-Content .\data\games.json | ConvertFrom-Json
-$modes = '60fps copy', '30fps copy', '30fps x264 medium crf21', '60fps FFV1 FLAC', '30fps FFV1 FLAC'
+############################################################
+# WiiRec Rewrite - https://github.com/froschgrosch/wiirec #
+# Licensed under GNU GPLv3. - File: record.ps1            #
+############################################################
 
-$outputPath = 'D:\Simon\WiiRec1' # without backslash!
+# === FUNCTIONS ===
+function Write-RecordInfo {
+    Write-Json $recordinfo ($config.path.record + '\' + $recordinfo.file.name + '.json')
+}
 
-# Check output folder
-if (-not (Test-Path $outputPath)){
-    Write-Host 'The specified output path does not exist.' $outputPath
-    pause
+function Test-RecordingMode ($id) {
+    if ($config.skipTest.mode) { return $true }
+    $arguments = '-y', '-t 1' + $config.modes.record[$id].data + "$($config.path.record)\test.mkv"
+
+    $Env:FFREPORT = 'file=test.ff.log:level=48'
+    $proc = Start-Process -PassThru -Wait -FilePath 'ffmpeg' -WindowStyle Hidden -ArgumentList $arguments -WorkingDirectory $config.path.record
+    $Env:FFREPORT = ''
+    
+    if($success = $proc.ExitCode -eq 0) {
+        Remove-Item "$($config.path.record)\test.*"
+    }
+    return $success
+}
+ 
+# === INITIALIZATION ===
+Write-Output '=== WiiRec Rewrite ==='
+
+. .\functions.ps1
+$config = Get-Config
+$games = Get-Games
+
+Test-Folder $config.path.record
+
+if (Test-Path -PathType Leaf -Path .\data\session.json){
+    Write-Output '=!= An Error has occurred. =!=' 'An active ingestion session was interrupted.' 'You need to finish the session before you can record new videos.'
+    if (Confirm-YN 'Resume ingestion now?'){
+        .\ingest.ps1
+    } 
     exit 1
 }
 
+# select game and mode
+$i_game = Select-FromArray $games 'Select game' #(0 .. 3) ##DEBUG##
+$i_mode = -1
 
-# Select Game
-$i = 1
-foreach($game in $games){
-    Write-Host "$i : $($game.name)"
-    $i++   
+if ($games[$i_game].modes.Length -gt 1){
+    Write-Output "There are multiple valid modes availabe for the game ""$($games[$i_game].name)""." 
+    $i_mode = Select-FromArray $config.modes.record 'Select mode' $games[$i_game].modes
+} 
+elseif ($games[$i_game].modes.Length -eq 1){
+    $i_mode = $games[$i_game].modes[0]
+}
+else {
+    Write-Output "No valid modes are availabe for the game ""$($games[$i_game].name)""." 
+    if (Confirm-YN 'Do you want to select a mode manually?') {
+        $i_mode = Select-FromArray 'Select mode'
+    }
+    else {
+        exit 1
+    }
+} 
+
+# test mode
+if (-not (Test-RecordingMode $i_mode)) {
+    Exit-Error "The selected mode ""$($config.modes.record[$i_mode].name)"" does not seem to work. Please investigate."
 }
 
-do {
-    $sel = [int]$(Read-Host -Prompt 'Select game')
-} while (-not (1 .. ($games.Length)).Contains($sel))
-$sel -= 1
+# === RECORDING ===
+# set up recording information
+$recordinfo = New-Object -TypeName 'PSObject'
 
+Add-ToObject $recordinfo 'game' $i_game
+Add-ToObject $recordinfo 'mode' $i_mode
+Add-ToObject $recordinfo 'recorder' $Env:USERNAME
+Add-NewProperty $recordinfo 'file'
+Add-ToObject $recordinfo.file 'name'  ((($starttime = Get-Date) | Get-Date -UFormat '%Y-%m-%d_%H-%M-%S_') + $games[$i_game].shortName)
+Add-NewProperty $recordinfo 'time'
+Add-ToObject $recordinfo.time 'start' ($starttime | Get-Date -UFormat '%Y-%m-%d %H-%M-%S')
 
-# Select Mode
-$i = 1
-foreach($mode in $modes){
-    Write-Host "$i : $mode"
-    $i++   
-}
+Write-RecordInfo
 
-do {
-    $selMode = [int]$(Read-Host -Prompt 'Select mode')
-} while (-not (1 .. ($modes.Length)).Contains($selMode))
-
-$filename = Get-Date -UFormat '%Y-%m-%d_%H-%M-%S'
-$filename += "-m$selMode-"
-$filename += $games[$sel].shortName
-
-$host.ui.RawUI.WindowTitle = "Recording $($games[$sel].name) in $($modes[$selMode - 1])"
-
+# start recording
 Clear-Host
-Write-Output $host.ui.RawUI.WindowTitle "Filename: $filename - Press q to stop." ' '
+Write-Output "Recording $($games[$i_game].name) in $($config.modes.record[$i_mode].name)." "Filename: $($recordinfo.file.name) - Press q to stop." ' '
 
-switch ($selMode) {
-    1 { # 60fps copy
-        ffmpeg -hide_banner -y -f dshow -video_size 640x480 -framerate 60 -sample_rate 48k -i video="USB Video":audio="Eingang (Realtek High Definition Audio)" -c copy "$outputPath\$filename.mkv"    
-    }
+$filepath = $config.path.record + '\' + $recordinfo.file.name + '.' + $config.modes.record[$i_mode].extension
+$arguments = '-hide_banner', '-y' + $config.modes.record[$i_mode].data + $filepath
+$proc = Start-Process -NoNewWindow -PassThru -FilePath 'ffmpeg' -ArgumentList $arguments
 
-    2 { # 30fps copy
-        ffmpeg -hide_banner -y -f dshow -video_size 640x480 -framerate 30 -sample_rate 48k -pixel_format yuyv422 -i video="USB Video":audio="Eingang (Realtek High Definition Audio)" -c copy "$outputPath\$filename.mkv"
-    }
-    
-    3 { # 30fps x264 medium crf21
-        ffmpeg -hide_banner -y -f dshow -video_size 640x480 -framerate 30 -sample_rate 48k -pixel_format yuyv422 -i video="USB Video":audio="Eingang (Realtek High Definition Audio)" -c:v libx264 -crf:v 21 -tune:v animation -preset:v medium -c:a libopus -b:a 64k -aspect 16:9 "$outputPath\$filename.mp4"
-    }
+# see https://learn.microsoft.com/en-us/dotnet/api/system.diagnostics.processpriorityclass?view=net-8.0
+$proc.PriorityClass = $config.processPriority 
+$proc.WaitForExit()
 
-    4 { # 60fps FFV1 FLAC
-        ffmpeg -hide_banner -y -f dshow -video_size 640x480 -framerate 60 -sample_rate 48k -rtbufsize 20M        -i video="USB Video":audio="Eingang (Realtek High Definition Audio)" -aspect 16:9 -c:v ffv1 -c:a flac "$outputPath\$filename.mkv"    
-    }
+# post-recording
+Add-ToObject $recordinfo.time 'stop' (($stoptime = Get-Date) | Get-Date -UFormat '%Y-%m-%d %H-%M-%S')
+Add-ToObject $recordinfo.time 'duration' (($stoptime - $starttime).ToString('hh\:mm\:ss\.ff'))
 
-    5 { # 30fps FFV1 FLAC
-        ffmpeg -hide_banner -y -f dshow -video_size 640x480 -framerate 30 -sample_rate 48k -pixel_format yuyv422 -i video="USB Video":audio="Eingang (Realtek High Definition Audio)" -aspect 16:9 -c:v ffv1 -c:a flac "$outputPath\$filename.mkv"
-    }
-}
-pause
+Add-NewProperty $recordinfo.file 'size'
+Add-ToObject $recordinfo.file.size 'raw'  (Get-Item $filepath).Length
+
+Write-RecordInfo
+if (-not $config.displayStats) { exit }
+
+# display stats
+Write-Output ' ' '=== Recording Stats ==='
+Write-Output "Started at: $($recordinfo.time.start)" 
+Write-Output "Stopped at: $($recordinfo.time.stop)" 
+Write-Output "Duration: $($recordinfo.time.duration)"
+Write-Output "Raw file size: $(Show-SizeWithSuffix $recordinfo.file.size.raw)"
+Pause

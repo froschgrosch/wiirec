@@ -2,11 +2,13 @@
     {
         "name": "Mario Kart Wii",
         "shortName": "MKWii",
-        "crop": "609:456:18:11"
+        "crop": "609:456:18:11",
+        "modes": [0,1]
     },{
         "name": "New Super Mario Bros Wii",
         "shortName": "NSMBW",
-        "crop": "607:456:19:11"
+        "crop": "607:456:19:11",
+        "modes": [0]
     },{
         "name": "Wii Sports",
         "shortName": "WiiSports",
@@ -43,5 +45,10 @@
         "name": "Mario & Sonic bei den Olympischen Spielen - Beijing 2008",
         "shortName": "Olympic08",
         "crop": "568:448:40:15"
+    },{
+        "name": "Debug",
+        "shortName": "DBG",
+        "modes": [2],
+        "hide" : true
     }
 ]
